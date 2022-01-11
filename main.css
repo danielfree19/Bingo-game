@@ -1,0 +1,33 @@
+@media print{
+    @page {size: landscape}
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+    html, body{margin: 0; padding: 0;}
+    .page{box-sizing: border-box; height: 100%; width: 100%; border: 1px solid transparent; page-break-after: always;}
+    .page-middle{height: 100%; width: 100%; display: table;}
+    .page-middle-inner{height: 100%; width: 100%; display: table-cell; vertical-align: middle;}
+
+}
+.table{
+    text-align: center;
+    margin-top: 20px;
+
+}
+a {
+    color: black;
+}
+a:hover{
+    color: #1c1f23;
+}
+.break{
+    page-break-after: always;
+    margin-top: 14%;
+}
+.col{
+    text-align: center;
+}
+.btn{
+    margin-top: 10px;
+}
