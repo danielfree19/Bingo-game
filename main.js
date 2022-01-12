@@ -1,4 +1,5 @@
-Listnerflag = false;
+var Listnerflag = false;
+var createCards = false;
 
 // event listner - auxilery click
 document.addEventListener("auxclick",(e)=>{
@@ -16,9 +17,12 @@ document.addEventListener("keyup",(e)=>{
 
 
 $(document).ready(()=>{
-
     // createCards the generateNumber button
     $("#createCards").prop('disabled',true);
+
+    if(parseInt($("#amountofrolls").text())>0){
+        createCards = true;
+    }
 
     // setting a keyup listner
     $("#amountTxt").on('keyup',validateNextButton);
@@ -48,6 +52,7 @@ $(document).ready(()=>{
     });
     //checking if session has a victory
     victoryCheck();
+    checkWins();
     // opening a new session old sessions saved on the database
     $("#newGame").click(()=>{
         window.location.replace("./api/newGame.php");
@@ -74,6 +79,9 @@ $(document).ready(()=>{
 
     // click event - generating the next number
     $("#generateNumber").click(()=>{
+        createCards = false;
+        // should add wins to cards that filled some rows
+
         if(victoryCheck()) {
             $.get({
                 url: "./api/generateNumber.php",
@@ -88,17 +96,9 @@ $(document).ready(()=>{
 
             Listnerflag = !(parseInt($("#amountofrolls").text()) == 74);
 
-            // should add wins to cards that filled some rows
-            $.get({
-                url: "./api/checkWins.php",
-                success: function (result) {
-                    //   console.log(result);
-                },
-                error: (err) => {
-                    console.log(err);
-                }
-            });
+
         }
+        checkWins();
     });
 
     // click event - runs the show cards function
@@ -120,14 +120,29 @@ $(document).ready(()=>{
             },
         });
     });
+
 });
 
 // ********************************* functions section ****************************************************
+
 // preventing pressing the create button when empty
 function validateNextButton() {
-    var buttonDisabled = $('#amountTxt').val().trim() === '';
-    $('#createCards').prop('disabled', buttonDisabled);
+    var buttonDisabled = $('#amountTxt').val().trim() === '' ;
+    $('#createCards').prop('disabled', buttonDisabled || parseInt($("#amountofrolls").text())>0);
 }
+
+function checkWins(){
+    $.get({
+        url: "./api/checkWins.php",
+        success: function (result) {
+            $("#test").html(result);
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
+}
+
 
 // under work
 function victoryCheck(){
@@ -140,8 +155,11 @@ function victoryCheck(){
             if(arr.length>0){
                 $("#generateNumber").prop('disabled',true);
                 Listnerflag = false;
-
-                $("#victors").html(arr);
+                let winners="Winning cards: ";
+                for(let x in arr){
+                   winners += arr[x]+", ";
+                }
+                $("#victors").html(winners);
                 return false;
             }
             else{
@@ -155,20 +173,6 @@ function victoryCheck(){
     return flag;
 }
 
-// under work
-canIContinue=()=>{
-    $.get({
-        url:"./api/checkIfvictory.php",
-        success:(res)=>{
-            if(res){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-    });
-}
 
 // reloading the page on command
 function reload(){ location.reload(); }

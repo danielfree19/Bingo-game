@@ -26,17 +26,17 @@ if(isset($_SESSION["cards"])){
     }
 
     if(sizeof($wins)>0){
-        if(isset($_SESSION["wins"])){
+        if(!isset($_SESSION["wins"])){
             $_SESSION["wins"] = array();
         }
         foreach($wins as $value){
-            $_SESSION["wins"][] = $value;
+            $_SESSION["cards"][$value-1]->addWins();
             $_SESSION["cards"][$value-1]->allTableComplete();
-//           print_r($_SESSION["cards"][$value-1]);
+            //print_r($_SESSION["cards"][$value-1]);
         }
     }
     echo json_encode($wins) ;
-//    print_r($_SESSION["wins"]);
+    //print_r($_SESSION["wins"]);
 }
 else{
     echo json_encode($wins) ;

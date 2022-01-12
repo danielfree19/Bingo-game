@@ -18,7 +18,7 @@
     <div class="container no-print">
     <div class="row">
         <div class="col">
-            <input type="number" id="amountTxt">
+            <input type="number" id="amountTxt"/>
             <button class="btn btn-primary" id="createCards">Create cards</button>
         </div>
         <div class="col">
@@ -36,6 +36,8 @@
     </div>
 </div>
     <div id="table"></div>
-    <div id="victors"></div>
+    <div id="victors" style="margin-left:100px;margin-top: 10px;"></div>
+
+    <div id="test" style="margin-left:100px;margin-top: 10px;"></div>
 </body>
 </html>
